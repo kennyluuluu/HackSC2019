@@ -67,17 +67,70 @@ public class Retrieve {
 		return codes;
 	}
 
+	// Code from https://www.tutorialspoint.com/sqlite/sqlite_java.htm
+	public static Connection SQL_init() {
+		Connection c = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:test.db");
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully");
+
+			stmt = c.createStatement();
+			String sql = "CREATE TABLE CLASSES " +
+					"(TITLE		TEXT	NOT NULL," +
+					" DAY		TEXT	NOT NULL," +
+					" START_TIME	TIME	NOT NULL," +
+					" END_TIME	TIME	NOT NULL," +
+					" LOCATION	TEXT	NOT NULL," +
+					" INSTRUCTOR	TEXT)";
+			stmt.execute(sql);
+			stmt.close();
+			return c	
+
+		} catch (Exception e) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		}
+		return null;
+	}
+
+	public static void SQL_insert(Connection c, String title, String day, String start_time, String end_time,
+				      String location, String instructor) {
+		
+		Statement stmt = null;
+		
+		try {
+			stmt = c.createStatement();
+			String sql = "INSERT INTO CLASSES (TITLE,DAY,START_TIME,END_TIME,LOCATION,INSTRUCTOR) " +
+					"VALUES ('" + title + "', '"
+			       			    + day + "', "
+						    + start_time + ", "
+						    + end_time + ", '"
+						    + location + "', '"
+						    + instructor + "' )";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+		} catch (Exception e) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/20143");
 		HashSet<String> codes = new HashSet<String>();
 		codes = findDepartmentCodes(rootObj);
-		Iterator<String> iterate = codes.iterator();
+		
 		int year = getYear();
 		// 1 is sprint, 2 is summer, 3 is fall
 		int semester = getSemester();
 
+		Connection dbConnection = SQL_init();
+
+		Iterator<String> iterate = codes.iterator();
 		while(iterate.hasNext()) {
 			
 			String departmentCode = iterate.next();
@@ -258,7 +311,8 @@ public class Retrieve {
 				}
 				System.out.println();
 
-			}		
+			}	
+		c.close();	
 		}
 	}
 	
