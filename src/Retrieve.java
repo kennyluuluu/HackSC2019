@@ -123,6 +123,10 @@ public class Retrieve {
 			System.exit(0);
 		}
 	}
+	
+	public static String getBuilding(String classroom) {
+		return classroom.replaceAll("\\d", "");
+	}
 
 	public static void findClasses(HashSet<String> codes, int year, int semester) throws IOException {
 
@@ -255,6 +259,7 @@ public class Retrieve {
 									if(locationObject != null) {
 										JsonElement locationWithinObject = locationObject.get("location");
 										location = locationWithinObject.getAsString();
+										location = getBuilding(location);
 									}
 									
 									if(dayObject != null) {
@@ -300,6 +305,7 @@ public class Retrieve {
 											
 										if(!locationWithinElement.isJsonObject()) {
 											location = locationArray.get(k).getAsString();
+											location = getBuilding(location);
 										}
 										
 										char[] multipleDays = day.toCharArray();
@@ -320,6 +326,7 @@ public class Retrieve {
 									
 									if(!locationElement.isJsonObject()) {
 										location = locationElement.getAsString();
+										location = getBuilding(location);
 									}
 									char[] multipleDays = day.toCharArray();
 									for(int c = 0; i < multipleDays.length; c++) {
@@ -395,6 +402,7 @@ public class Retrieve {
 									location = locationElement.getAsString();
 
 								}
+								location = getBuilding(location);
 								
 								//Create strings of each
 								if(startTimeObject != null) {
@@ -412,6 +420,7 @@ public class Retrieve {
 								if(locationObject != null) {
 									JsonElement locationWithinObject = locationObject.get("location");
 									location = locationWithinObject.getAsString();
+									location = getBuilding(location);
 
 								}
 								
@@ -457,6 +466,7 @@ public class Retrieve {
 										
 									if(!locationWithinElement.isJsonObject()) {
 										location = locationArray.get(k).getAsString();
+										location = getBuilding(location);
 									}
 									char[] multipleDays = day.toCharArray();
 									for(int c = 0; i < multipleDays.length; c++) {
@@ -476,6 +486,7 @@ public class Retrieve {
 								
 								if(!locationElement.isJsonObject()) {
 									location = locationElement.getAsString();
+									location = getBuilding(location);
 								}
 								char[] multipleDays = day.toCharArray();
 								for(int c = 0; i < multipleDays.length; c++) {
