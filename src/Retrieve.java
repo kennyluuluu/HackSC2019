@@ -141,13 +141,244 @@ public class Retrieve {
 			
 			//Retrieve classes and sections from URL
 			JsonObject offeredCourses = classJson.get("OfferedCourses").getAsJsonObject();
-			JsonArray courses = offeredCourses.get("course").getAsJsonArray();
-		
-			//for loop to increment through each course in the specific department
-			for(int i = 0; i < courses.size(); i++) {
 			
-				//Retrieve course ID
-				JsonObject courseObj = courses.get(i).getAsJsonObject();
+			JsonElement coursesElement = offeredCourses.get("course");
+			
+			if(coursesElement.isJsonArray()) {
+				
+				JsonArray courses = coursesElement.getAsJsonArray();
+			
+				//for loop to increment through each course in the specific department
+				for(int i = 0; i < courses.size(); i++) {
+				
+					//Retrieve course ID
+					JsonObject courseObj = courses.get(i).getAsJsonObject();
+					String courseID = courseObj.get("PublishedCourseID").getAsString();
+					System.out.print(courseID + " ");
+				
+					//Retrieve course title
+					JsonObject courseData = courseObj.get("CourseData").getAsJsonObject();
+					String title = courseData.get("title").getAsString();
+					System.out.print(title + " ");
+				
+					//Retrieve section data
+					JsonElement sectElement = courseData.get("SectionData");
+					System.out.println();
+				
+					//Check if multiple sections
+					if(sectElement.isJsonArray()) {
+						JsonArray sections = courseData.get("SectionData").getAsJsonArray();
+					
+						//Loop through each section
+						for(int j = 0; j < sections.size(); j++) {
+								
+							//Retrieve section number
+							JsonObject section = sections.get(j).getAsJsonObject();
+							String session = section.get("session").getAsString();
+							System.out.print(session + " ");
+		
+							//Retrieve day
+							JsonElement dayElement = section.get("day");
+							if(dayElement != null) {
+								if (dayElement.isJsonObject()){
+									JsonObject dayObject = dayElement.getAsJsonObject();
+									if(dayObject != null) {
+										JsonElement dayWithinElement = dayObject.get("day");
+										if(dayWithinElement != null) {
+											String day = dayWithinElement.getAsString();
+											System.out.print(day + " ");
+										}
+									}
+								} else if (dayElement.isJsonArray()){
+									JsonArray dayArray = dayElement.getAsJsonArray();
+									for(int k = 0; k < dayArray.size(); k++) {
+										JsonElement dayWithinElement = dayArray.get(k);
+										if(!dayWithinElement.isJsonObject()) {
+											String day = dayArray.get(k).getAsString();
+											System.out.print(day + " ");
+										}
+
+									}
+								} else {
+									String day = dayElement.getAsString();
+									System.out.print(day + " ");
+								}
+							}
+	
+							//Retrieve time 
+							JsonElement timeElement = section.get("start_time");
+							if(timeElement != null) {
+								if(timeElement.isJsonObject()) {
+									String time = section.get("start_time").getAsString() + "-" + section.get("end_time").getAsString();
+									System.out.print(time + " ");
+								} else if (timeElement.isJsonArray()){
+									JsonArray timeArray = timeElement.getAsJsonArray();
+									for(int k = 0; k < timeArray.size(); k++) {
+										JsonElement timeWithinElement = timeArray.get(k);
+										if(!timeWithinElement.isJsonObject()) {
+											String time = timeArray.get(k).getAsString() + "-" + section.get("end_time").getAsJsonArray().get(k).getAsString();
+											System.out.print(time+ " ");
+										}
+									}
+								} else {
+									String time = timeElement.getAsString() + "-" + section.get("end_time").getAsString();
+									System.out.print(time + " ");
+								}
+							}
+						
+							//Retrieve location
+							JsonElement locateElement = section.get("location");
+							if(locateElement != null && !locateElement.isJsonObject()) {
+								if(locateElement.isJsonObject()) {
+									String location = section.get("location").getAsString();
+									System.out.print(location + " ");
+								} else if(locateElement.isJsonArray()) {
+									JsonArray locateArray = locateElement.getAsJsonArray();
+									for(int k = 0; k < locateArray.size(); k++) {
+										JsonElement locateWithinElement = locateArray.get(k);
+										if(!locateWithinElement.isJsonObject()) {
+											String location = locateArray.get(k).getAsString();
+											System.out.print(location + " ");
+										}
+									}
+								} else {
+									String location = locateElement.getAsString();
+									System.out.print(location + " ");
+								}
+							}
+						
+							//Retrieve instructor
+							JsonElement instructElement = section.get("instructor");
+						
+							//Check if instructor exists
+							if(instructElement != null) {
+								if(instructElement.isJsonObject()) {
+								
+									//Receive data for single instructor
+									JsonObject instructObj = instructElement.getAsJsonObject();
+									String instructorName = instructObj.get("first_name").getAsString() + " " + instructObj.get("last_name").getAsString();
+									System.out.print(instructorName + " ");
+								
+								} else {
+								
+									//Receive data for multiple instructors
+									JsonArray instructArray = instructElement.getAsJsonArray();
+									for(int k = 0; k < instructArray.size(); k++) {
+										JsonObject instructObj = instructArray.get(k).getAsJsonObject();
+										String instructorName = instructObj.get("first_name").getAsString() + " " + instructObj.get("last_name").getAsString();
+										System.out.print(instructorName+ " ");
+									}
+								}
+							}
+							System.out.println();
+						}
+					} else {
+					
+						//Retrieve section
+						JsonObject section = sectElement.getAsJsonObject();
+						String session = section.get("session").getAsString();
+						System.out.print(session + " ");
+	
+						//Retrieve day
+						JsonElement dayElement = section.get("day");
+						if(dayElement != null) {
+							if(dayElement.isJsonObject()) {
+								JsonObject dayObject = dayElement.getAsJsonObject();
+								JsonElement dayWithinObject = dayObject.get("day");
+								if(dayWithinObject != null) {
+									String day = dayObject.get("day").getAsString();
+									System.out.print(day + " ");
+								}
+							} else if(dayElement.isJsonArray()) {
+								JsonArray dayArray = dayElement.getAsJsonArray();
+								for(int k = 0; k < dayArray.size(); k++) {
+									JsonElement dayWithinElement = dayArray.get(k);
+									if(dayWithinElement.isJsonObject()) {
+										JsonObject dayObject = dayWithinElement.getAsJsonObject();
+										JsonElement dayWithinObject = dayObject.get("day");
+										if(dayWithinObject != null) {
+											String day = dayWithinObject.getAsString();
+											System.out.print(day+ " ");
+										}
+									} else {
+										String day = dayWithinElement.getAsString();
+										System.out.print(day + " ");
+									}
+
+								}
+							} else {
+								String day = dayElement.getAsString();
+								System.out.print(day + " ");
+							}
+						}
+					
+						//Retrieve time
+						JsonElement timeElement = section.get("start_time");
+						if(timeElement != null) {
+							if(timeElement.isJsonObject()) {
+								String time = section.get("start_time").getAsString() + "-" + section.get("end_time").getAsString();
+								System.out.print(time + " ");
+							} else if (timeElement.isJsonArray()){
+								JsonArray timeArray = timeElement.getAsJsonArray();
+								for(int k = 0; k < timeArray.size(); k++) {
+									JsonElement timeWithinElement = timeArray.get(k);
+									if(timeWithinElement != null) {
+										if(!timeWithinElement.isJsonObject()) {
+											String time = timeWithinElement.getAsString() + "-" + section.get("end_time").getAsJsonArray().get(k).getAsString();
+											System.out.print(time+ " ");
+										}
+									}
+								}
+							} else {
+								String time = timeElement.getAsString() + "-" + section.get("end_time").getAsString();
+								System.out.print(time + " ");
+							}
+						}
+					
+						//Retrieve location
+						JsonElement locateElement = section.get("location");
+						if(locateElement != null) {
+							if(locateElement.isJsonObject()) {
+	//							JsonObject locateObject = locateElement.getAsJsonObject();
+	//							String location = locateObject.get("location").getAsString();
+	//							System.out.print(location + " ");
+							} else if(locateElement.isJsonArray()) {
+								JsonArray locateArray = locateElement.getAsJsonArray();
+								for(int k = 0; k < locateArray.size(); k++) {
+									JsonElement locateWithinElement = locateArray.get(k);
+									if(!locateWithinElement.isJsonObject()) {
+										String location = locateWithinElement.getAsString();
+										System.out.print(location + " ");
+									}
+								}
+							} else {
+								String location = section.get("location").getAsString();
+								System.out.print(location + " ");
+							}
+						}
+						//Retrieve instructor
+						JsonElement instructElement = section.get("instructor");
+						if(instructElement != null) {
+							if(instructElement.isJsonObject()) {
+								JsonObject instructObj = instructElement.getAsJsonObject();
+								instructObj = instructObj.getAsJsonObject();
+								String instructorName = instructObj.get("first_name").getAsString() + " " + instructObj.get("last_name").getAsString();
+								System.out.print(instructorName + " ");
+							} else {
+								JsonArray instructArray = instructElement.getAsJsonArray();
+								for(int k = 0; k < instructArray.size(); k++) {
+									JsonObject instructObj = instructArray.get(k).getAsJsonObject();
+									String instructorName = instructObj.get("first_name").getAsString() + " " + instructObj.get("last_name").getAsString();
+									System.out.print(instructorName+ " ");
+								}
+							}
+						}
+					}
+					System.out.println();
+	
+				}		
+			} else {
+				JsonObject courseObj = coursesElement.getAsJsonObject();
 				String courseID = courseObj.get("PublishedCourseID").getAsString();
 				System.out.print(courseID + " ");
 			
@@ -269,28 +500,71 @@ public class Retrieve {
 					if(dayElement != null) {
 						if(dayElement.isJsonObject()) {
 							JsonObject dayObject = dayElement.getAsJsonObject();
-							String day = dayObject.get("day").getAsString();
+							JsonElement dayWithinObject = dayObject.get("day");
+							if(dayWithinObject != null) {
+								String day = dayObject.get("day").getAsString();
+								System.out.print(day + " ");
+							}
+						} else if(dayElement.isJsonArray()) {
+							JsonArray dayArray = dayElement.getAsJsonArray();
+							for(int k = 0; k < dayArray.size(); k++) {
+								JsonObject dayObject = dayArray.get(k).getAsJsonObject();
+								JsonElement dayWithinObject = dayObject.get("day");
+								if(dayWithinObject != null) {
+									String day = dayWithinObject.getAsString();
+									System.out.print(day+ " ");
+								}
+							}
+						} else {
+							String day = dayElement.getAsString();
+							System.out.print(day + " ");
 						}
-					}
-					if(dayElement != null && !dayElement.isJsonObject() ) {
-						String day = dayElement.getAsString();
-						System.out.print(day + " ");
 					}
 				
 					//Retrieve time
-					JsonElement timeObj = section.get("start_time");
-					if(timeObj != null) {
-						String time = section.get("start_time").getAsString() + "-" + section.get("end_time").getAsString();
-						System.out.print(time + " ");
+					JsonElement timeElement = section.get("start_time");
+					if(timeElement != null) {
+						if(timeElement.isJsonObject()) {
+							String time = section.get("start_time").getAsString() + "-" + section.get("end_time").getAsString();
+							System.out.print(time + " ");
+						} else if (timeElement.isJsonArray()){
+							JsonArray timeArray = timeElement.getAsJsonArray();
+							for(int k = 0; k < timeArray.size(); k++) {
+								JsonElement timeWithinElement = timeArray.get(k);
+								if(timeWithinElement != null) {
+									if(!timeWithinElement.isJsonObject()) {
+										String time = timeWithinElement.getAsString() + "-" + section.get("end_time").getAsJsonArray().get(k).getAsString();
+										System.out.print(time+ " ");
+									}
+								}
+							}
+						} else {
+							String time = timeElement.getAsString() + "-" + section.get("end_time").getAsString();
+							System.out.print(time + " ");
+						}
 					}
 				
 					//Retrieve location
-					JsonElement locateObj = section.get("location");
-					if(locateObj != null && !locateObj.isJsonObject()) {
-						String location = section.get("location").getAsString();
-						System.out.print(location + " ");
+					JsonElement locateElement = section.get("location");
+					if(locateElement != null) {
+						if(locateElement.isJsonObject()) {
+//							JsonObject locateObject = locateElement.getAsJsonObject();
+//							String location = locateObject.get("location").getAsString();
+//							System.out.print(location + " ");
+						} else if(locateElement.isJsonArray()) {
+							JsonArray locateArray = locateElement.getAsJsonArray();
+							for(int k = 0; k < locateArray.size(); k++) {
+								JsonElement locateWithinElement = locateArray.get(k);
+								if(!locateWithinElement.isJsonObject()) {
+									String location = locateWithinElement.getAsString();
+									System.out.print(location + " ");
+								}
+							}
+						} else {
+							String location = section.get("location").getAsString();
+							System.out.print(location + " ");
+						}
 					}
-				
 					//Retrieve instructor
 					JsonElement instructElement = section.get("instructor");
 					if(instructElement != null) {
@@ -310,7 +584,6 @@ public class Retrieve {
 					}
 				}
 				System.out.println();
-
 			}	
 		c.close();	
 		}
@@ -325,7 +598,6 @@ public class Retrieve {
 			JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
 			return root.getAsJsonObject();
 		} catch(Exception e) {
-			e.printStackTrace();
 		}
 		return null;
 		
