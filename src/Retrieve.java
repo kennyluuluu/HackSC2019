@@ -301,7 +301,13 @@ public class Retrieve {
 										if(!locationWithinElement.isJsonObject()) {
 											location = locationArray.get(k).getAsString();
 										}
-										System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " + start_time + "-" + end_time + " " + location);
+										
+										char[] multipleDays = day.toCharArray();
+										for(int c = 0; i < multipleDays.length; c++) {
+											day = Character.toString(multipleDays[c]);
+											System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
+											SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+										}									
 									}
 									
 								//Check if each one is just a string
@@ -315,8 +321,12 @@ public class Retrieve {
 									if(!locationElement.isJsonObject()) {
 										location = locationElement.getAsString();
 									}
-									System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
-
+									char[] multipleDays = day.toCharArray();
+									for(int c = 0; i < multipleDays.length; c++) {
+										day = Character.toString(multipleDays[c]);
+										System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
+										SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+									}		
 								}
 							}
 						}
@@ -448,8 +458,12 @@ public class Retrieve {
 									if(!locationWithinElement.isJsonObject()) {
 										location = locationArray.get(k).getAsString();
 									}
-									System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " " + day +" "+ start_time + "-" + end_time + " " + location);
-
+									char[] multipleDays = day.toCharArray();
+									for(int c = 0; i < multipleDays.length; c++) {
+										day = Character.toString(multipleDays[c]);
+										System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
+										SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+									}		
 								}
 								
 							//Check if each one is just a string
@@ -463,8 +477,12 @@ public class Retrieve {
 								if(!locationElement.isJsonObject()) {
 									location = locationElement.getAsString();
 								}
-								System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day +" "+ start_time + "-" + end_time + " " + location);
-
+								char[] multipleDays = day.toCharArray();
+								for(int c = 0; i < multipleDays.length; c++) {
+									day = Character.toString(multipleDays[c]);
+									System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
+									SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+								}		
 							}
 						}
 				
