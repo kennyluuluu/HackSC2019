@@ -67,18 +67,10 @@ public class Retrieve {
 		return codes;
 	}
 
-
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/20143");
-		HashSet<String> codes = new HashSet<String>();
-		codes = findDepartmentCodes(rootObj);
-		Iterator<String> iterate = codes.iterator();
-		int year = getYear();
-		// 1 is sprint, 2 is summer, 3 is fall
-		int semester = getSemester();
+	public static void findClasses(HashSet<String> codes, Iterator<String> iterate, int year, int semester) throws IOException {
 
 		while(iterate.hasNext()) {
+			
 			
 			String departmentCode = iterate.next();
 			JsonObject classJson = readJsonFromURL("https://web-app.usc.edu/web/soc/api/classes/" + departmentCode + "/" + Integer.toString(year) + Integer.toString(semester));
@@ -549,5 +541,21 @@ public class Retrieve {
 		return null;
 		
 	}
+	
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/20143");
+		HashSet<String> codes = new HashSet<String>();
+		codes = findDepartmentCodes(rootObj);
+		Iterator<String> iterate = codes.iterator();
+		int year = getYear();
+		// 1 is sprint, 2 is summer, 3 is fall
+		int semester = getSemester();
+		
+		findClasses(codes, iterate, year, semester);
+
+	}
+	
+
 
 }
