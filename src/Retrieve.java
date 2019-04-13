@@ -67,7 +67,6 @@ public class Retrieve {
 		return codes;
 	}
 
-<<<<<<< HEAD
 	// Code from https://www.tutorialspoint.com/sqlite/sqlite_java.htm
 	public static Connection SQL_init() {
 		Connection c = null;
@@ -578,9 +577,10 @@ public class Retrieve {
 					}
 				}
 				System.out.println();
-			}	
-		dbConnection.close();	
+			}
 		}
+		
+		dbConnection.close();	
 	}
 	
 	public static JsonObject readJsonFromURL(String stringURL) throws IOException {
@@ -602,10 +602,11 @@ public class Retrieve {
 		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/20143");
 		HashSet<String> codes = new HashSet<String>();
 		codes = findDepartmentCodes(rootObj);
-		Iterator<String> iterate = codes.iterator();
+		
 		int year = getYear();
-		// 1 is sprint, 2 is summer, 3 is fall
-		int semester = getSemester();
+		int semester = getSemester(); // 1 is sprint, 2 is summer, 3 is fall
+		
+		Iterator<String> iterate = codes.iterator();
 		
 		findClasses(codes, iterate, year, semester);
 
