@@ -67,6 +67,7 @@ public class Retrieve {
 		return codes;
 	}
 
+<<<<<<< HEAD
 	// Code from https://www.tutorialspoint.com/sqlite/sqlite_java.htm
 	public static Connection SQL_init() {
 		Connection c = null;
@@ -118,20 +119,13 @@ public class Retrieve {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/20143");
-		HashSet<String> codes = new HashSet<String>();
-		codes = findDepartmentCodes(rootObj);
-		
-		int year = getYear();
-		// 1 is sprint, 2 is summer, 3 is fall
-		int semester = getSemester();
+	public static void findClasses(HashSet<String> codes, Iterator<String> iterate, int year, int semester) throws IOException {
 
 		Connection dbConnection = SQL_init();
 
 		Iterator<String> iterate = codes.iterator();
 		while(iterate.hasNext()) {
+			
 			
 			String departmentCode = iterate.next();
 			JsonObject classJson = readJsonFromURL("https://web-app.usc.edu/web/soc/api/classes/" + departmentCode + "/" + Integer.toString(year) + Integer.toString(semester));
@@ -585,7 +579,7 @@ public class Retrieve {
 				}
 				System.out.println();
 			}	
-		c.close();	
+		dbConnection.close();	
 		}
 	}
 	
@@ -602,5 +596,21 @@ public class Retrieve {
 		return null;
 		
 	}
+	
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/20143");
+		HashSet<String> codes = new HashSet<String>();
+		codes = findDepartmentCodes(rootObj);
+		Iterator<String> iterate = codes.iterator();
+		int year = getYear();
+		// 1 is sprint, 2 is summer, 3 is fall
+		int semester = getSemester();
+		
+		findClasses(codes, iterate, year, semester);
+
+	}
+	
+
 
 }
