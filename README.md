@@ -1,8 +1,8 @@
 # HackSC2019
+DONE:
+1. PARSE JSON FILE FROM USC WEBSITE TO STORE CLASS DATA IN SQL
+2. PARSING BUILDINGS WEBSITE FROM BUILDING CODE TO NAME AND ADDRESS
+
 
 TODO:
-1. Write script to parse JSON class data into a SQL table.
-2. Sort SQL table by buildings
-3. For each building map coordinates
-4. List classes currently in session at each building.
-5. Display in AR or map.
+1. QUERY DATABASE TO ADD TABLE THAT MAPS BUILDINGS TO COORDINATES
