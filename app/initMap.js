@@ -35,10 +35,10 @@ function initMap() {
 	document.getElementById('time').addEventListener('change', function() {
 		time = document.getElementById("time").value;
 		if (time === "00") {
-			timeNumber = new Date().getHours();
-			time = timeNumber.toString(10);
+			time = new Date().getHours();
+		} else {
+			time = parseInt(time);
 		}
-
 		console.log(typeof(time))
 		console.log(time);
 	})
