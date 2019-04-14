@@ -80,15 +80,13 @@ public class Retrieve {
 			System.out.println("Opened database successfully");
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE CLASS " +
-					"(CourseID TEXT NOT NULL"
-					+ "TITLE		TEXT	NOT NULL," +
+			String sql = "CREATE TABLE CLASS "
+					+ "(TITLE		TEXT	NOT NULL," +
 					" DAY		TEXT	NOT NULL," +
 					" START_TIME	TIME	NOT NULL," +
 					" END_TIME	TIME	NOT NULL," +
 					" LOCATION	TEXT	NOT NULL," +
 					" INSTRUCTOR	TEXT"
-					+ "PRIMARY KEY(CourseID, "
 					+ ");";
 			stmt.execute(sql);
 			stmt.close();
@@ -108,11 +106,11 @@ public class Retrieve {
 		
 		try {
 			stmt = c.createStatement();
-			String sql = "INSERT INTO CLASSES (TITLE,DAY,START_TIME,END_TIME,LOCATION,INSTRUCTOR) " +
+			String sql = "INSERT INTO CLASS (TITLE,DAY,START_TIME,END_TIME,LOCATION,INSTRUCTOR) " +
 					"VALUES ('" + title + "', '"
-			       			    + day + "', "
-						    + start_time + ", "
-						    + end_time + ", '"
+			       			    + day + "', '"
+						    + start_time + "', '"
+						    + end_time + "', '"
 						    + location + "', '"
 						    + instructor + "' )";
 			stmt.executeUpdate(sql);
@@ -267,7 +265,7 @@ public class Retrieve {
 										if(dayWithinElement != null) {
 											day = dayWithinElement.getAsString();
 											char[] multipleDays = day.toCharArray();
-											for(int c = 0; i < multipleDays.length; c++) {
+											for(int c = 0; c < multipleDays.length; c++) {
 												day = Character.toString(multipleDays[c]);
 												System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
 												SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
@@ -309,7 +307,7 @@ public class Retrieve {
 										}
 										
 										char[] multipleDays = day.toCharArray();
-										for(int c = 0; i < multipleDays.length; c++) {
+										for(int c = 0; c < multipleDays.length; c++) {
 											day = Character.toString(multipleDays[c]);
 											System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
 											SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
@@ -329,7 +327,7 @@ public class Retrieve {
 										location = getBuilding(location);
 									}
 									char[] multipleDays = day.toCharArray();
-									for(int c = 0; i < multipleDays.length; c++) {
+									for(int c = 0; c < multipleDays.length; c++) {
 										day = Character.toString(multipleDays[c]);
 										System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
 										SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
@@ -429,7 +427,7 @@ public class Retrieve {
 									if(dayWithinElement != null) {
 										day = dayWithinElement.getAsString();
 										char[] multipleDays = day.toCharArray();
-										for(int c = 0; i < multipleDays.length; c++) {
+										for(int c = 0; c < multipleDays.length; c++) {
 											day = Character.toString(multipleDays[c]);
 											System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
 										}
@@ -469,7 +467,7 @@ public class Retrieve {
 										location = getBuilding(location);
 									}
 									char[] multipleDays = day.toCharArray();
-									for(int c = 0; i < multipleDays.length; c++) {
+									for(int c = 0; c < multipleDays.length; c++) {
 										day = Character.toString(multipleDays[c]);
 										System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
 										SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
@@ -489,7 +487,7 @@ public class Retrieve {
 									location = getBuilding(location);
 								}
 								char[] multipleDays = day.toCharArray();
-								for(int c = 0; i < multipleDays.length; c++) {
+								for(int c = 0; c < multipleDays.length; c++) {
 									day = Character.toString(multipleDays[c]);
 									System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
 									SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
