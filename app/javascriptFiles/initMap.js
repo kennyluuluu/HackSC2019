@@ -36,27 +36,42 @@ function initMap() {
 		alert(map.getCenter());
 	});
 
-	var firstPartition = createFourQuadLatLng(USC_BOUNDS);
-//	var searchBox = new google.maps.places.PlacesService(map);
-//	searchBox.findPlaceFromQuery({
-//		fields : ["geometry.location"],
-//		locationBias : USC_BOUNDS,
-//		query : "school"
-//	}, function(places, status) {
-//		if (status == google.maps.places.PlacesServiceStatus.OK) {
-//			alert(places.length);
-//			places.forEach(function(place){
-//				var placeMarker = new google.maps.Marker({
-//					position : place.geometry.location,
-//					map: map
-//				});
-//				placeMarker.setMap(map);
-//			});
-//		}
-//	});
+	var bounds = createSixteenBounds(splitBoundByFour(USC_BOUNDS));
+	console.log(bounds);
+	var searchBox = new google.maps.places.PlacesService(map);
+	for (var i=0; i<bounds.length; ++i) {
+		searchBox.findPlaceFromQuery({
+			fields : ["geometry.location"],
+			locationBias : bounds[i],
+			query : "point_of_interest"
+		}, function(places, status) {
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+				places.forEach(function(place){
+					var placeMarker = new google.maps.Marker({
+						position : place.geometry.location,
+						map: map
+					});
+					placeMarker.setMap(map);
+				});
+			}
+			else {
+				--i;
+			}
+		});
+	}
 }
 
-function createFourQuadLatLng(latLngBound) {
+function createSixteenBounds(bounds) {
+	var latLngBounds = [];
+	bounds.forEach(function(bound) {
+		splitBoundByFour(bound).forEach(function(bound){
+			latLngBounds.push(bound);
+		})
+	})
+	return latLngBounds;
+}
+
+function splitBoundByFour(latLngBound) {
 	var middleLat = latLngBound.south + (latLngBound.north-latLngBound.south)/2;
 	var middleLng = latLngBound.west + (latLngBound.east-latLngBound.west)/2;
 	
@@ -76,7 +91,7 @@ function createFourQuadLatLng(latLngBound) {
 	
 	var botLeft = {
 			north: middleLat,
-			south: latLngBound.sound,
+			south: latLngBound.south,
 			west: latLngBound.west,
 			east: middleLng
 	}
