@@ -29,5 +29,34 @@ function initMap() {
 	    	position: google.maps.ControlPosition.LEFT_TOP
 	    }
 	});
-	
+
+	var time;
+
+	document.getElementById('time').addEventListener('change', function() {
+		time = document.getElementById("time").value;
+		if (time === "00") {
+			timeNumber = new Date().getHours();
+			time = timeNumber.toString(10);
+		}
+
+		console.log(typeof(time))
+		console.log(time);
+	})
+
+	// var request = new XMLHttpRequest()
+	// request.open('GET', ''. true)
+	//
+	// request.onload = function () {
+	// 	var data = JSON.parse(this.response)
+	// 	if (request.status === 200) {
+	// 		data.forEach(class => {
+	// 			if class.time === selectedHour {
+	//
+	// 			}
+	// 		})
+	// 	} else {
+	// 		console.log('error')
+	// 	}
+	// }
+
 }
