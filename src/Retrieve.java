@@ -80,14 +80,16 @@ public class Retrieve {
 			System.out.println("Opened database successfully");
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE CLASS "
-					+ "(TITLE		TEXT	NOT NULL," +
-					" DAY		TEXT	NOT NULL," +
-					" START_TIME	TIME	NOT NULL," +
-					" END_TIME	TIME	NOT NULL," +
-					" LOCATION	TEXT	NOT NULL," +
-					" INSTRUCTOR	TEXT"
-					+ ");";
+			String sql = "CREATE TABLE CLASS( " +
+					"COURSEID	TEXT 	PRIMARY KEY,"  +
+					"TITLE		TEXT	NOT NULL," +
+					"SESSION	TEXT	PRIMARY KEY," +
+					"DAY		CHAR	PRIMARY KEY," +
+					"START_TIME	TIME	NOT NULL," +
+					"END_TIME	TIME	NOT NULL," +
+					"LOCATION	TEXT	NOT NULL," +
+					"INSTRUCTOR	TEXT);";
+					
 			stmt.execute(sql);
 			stmt.close();
 			return c;	
@@ -99,20 +101,22 @@ public class Retrieve {
 		return null;
 	}
 	
-	public static void SQL_insert(Connection c, String title, String day, String start_time, String end_time,
-		      String location, String instructor) {
-
+	public static void SQL_insert(Connection c, String courseID, String title, String session, String day,
+								String start_time, String end_time, String location, String instructor) {
 		Statement stmt = null;
 		
 		try {
 			stmt = c.createStatement();
-			String sql = "INSERT INTO CLASS (TITLE,DAY,START_TIME,END_TIME,LOCATION,INSTRUCTOR) " +
-					"VALUES ('" + title + "', '"
-			       			    + day + "', '"
-						    + start_time + "', '"
-						    + end_time + "', '"
-						    + location + "', '"
-						    + instructor + "' )";
+			String sql = "INSERT OR REPLACE INTO CLASSES (COURSEID,TITLE,SESSION,DAY,START_TIME,END_TIME,LOCATION,INSTRUCTOR)" +
+					"VALUES(" +
+						"'" + courseID + "'," +
+						"'" + title + "'," +
+						"'" + session + "'," +
+						"'" + day + "'," +
+						start_time + "," +
+						end_time + "," +
+						"'" + location + "'," +
+						"'" + instructor + "');";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -129,6 +133,7 @@ public class Retrieve {
 	public static void findClasses(HashSet<String> codes, int year, int semester) throws IOException {
 
 		Connection dbConnection = SQL_init();
+		SQL_insert(dbConnection, "PATH-551", "Biology", "046", "M", "10:00", "11:50", "OFFICE", "RICHARD");
 		
 		Iterator<String> iterate = codes.iterator();
 		
@@ -268,7 +273,7 @@ public class Retrieve {
 											for(int c = 0; c < multipleDays.length; c++) {
 												day = Character.toString(multipleDays[c]);
 												System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
-												SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+												//SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
 											}
 										}
 									}
@@ -310,7 +315,7 @@ public class Retrieve {
 										for(int c = 0; c < multipleDays.length; c++) {
 											day = Character.toString(multipleDays[c]);
 											System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
-											SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+											//SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
 										}									
 									}
 									
@@ -330,7 +335,7 @@ public class Retrieve {
 									for(int c = 0; c < multipleDays.length; c++) {
 										day = Character.toString(multipleDays[c]);
 										System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
-										SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+										//SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
 									}		
 								}
 							}
@@ -470,7 +475,7 @@ public class Retrieve {
 									for(int c = 0; c < multipleDays.length; c++) {
 										day = Character.toString(multipleDays[c]);
 										System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
-										SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+										//SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
 									}		
 								}
 								
@@ -490,7 +495,7 @@ public class Retrieve {
 								for(int c = 0; c < multipleDays.length; c++) {
 									day = Character.toString(multipleDays[c]);
 									System.out.println(courseID +" "+ title +" "+ session +" "+ instructor + " "+ day + " " +start_time + "-" + end_time + " " + location);
-									SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
+									//SQL_insert(dbConnection, title, day, start_time, end_time, location, instructor);
 								}		
 							}
 						}
