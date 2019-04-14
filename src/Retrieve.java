@@ -22,6 +22,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Retrieve {
+	
+	public static Connection dbConnection;
+	
 	public static int getYear() {
 		Date today = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -74,15 +77,14 @@ public class Retrieve {
 	
 	// Code from https://www.tutorialspoint.com/sqlite/sqlite_java.htm
 	public static Connection SQL_init() {
-		Connection c = null;
 		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:test.db");
-			c.setAutoCommit(false);
+			dbConnection = DriverManager.getConnection("jdbc:sqlite:test.db");
+			dbConnection.setAutoCommit(false);
 			System.out.println("Opened database successfully");
 
-			stmt = c.createStatement();
+			stmt = dbConnection.createStatement();
 			String classSQL = "CREATE TABLE IF NOT EXISTS CLASS( " +
 					"COURSEID	TEXT 	NOT NULL,"  +
 					"TITLE		TEXT	NOT NULL," +
@@ -105,7 +107,7 @@ public class Retrieve {
 						+ ");";
 			stmt.execute(coordinatesSQL);
 			stmt.close();
-			return c;	
+			return dbConnection;	
 
 		} catch (Exception e) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -114,23 +116,24 @@ public class Retrieve {
 		return null;
 	}
 	
-	public static void populateBuilding(Connection c) throws SQLException {
-		Statement stmt = null;
-		String selectSQL = "SELECT DISTINCT LOCATION FROM CLASS";
-		String insertSQL = null;
-		
-		stmt = c.createStatement();
-		
-		ResultSet buildingNames = stmt.executeQuery(selectSQL);
-		while(buildingNames.next()) {
-			String currentBuilding = buildingNames.getString("LOCATION");
-			insertSQL = "INSERT OR REPLACE INTO COORDINATES(BUILDING)" +
-						"VALUES('" + currentBuilding + "');";
-			stmt.execute(insertSQL);
-		}
-		
-		
-	}
+//	public static void populateBuilding() throws SQLException {
+//		Statement stmt = null;
+//		String selectSQL = "SELECT DISTINCT LOCATION FROM CLASS";
+//		String insertSQL = null;
+//		
+//		stmt = dbConnection.createStatement();
+//		
+//		ResultSet rs = stmt.executeQuery(selectSQL);
+//		while(rs.next()) {
+//			String currentBuilding = rs.getString("LOCATION");
+//			System.out.println(currentBuilding);
+//			insertSQL = "INSERT OR REPLACE INTO COORDINATES(BUILDING) " +
+//						"VALUES('" + currentBuilding + "');";
+//			stmt.executeUpdate(insertSQL);
+//		}
+//		stmt.close();
+//		
+//	}
 	
 	public static void SQL_insert(Connection c, String courseID, String title, String session, String day,
 								String start_time, String end_time, String location, String instructor) {
@@ -162,8 +165,6 @@ public class Retrieve {
 	}
 
 	public static void findClasses(HashSet<String> codes, int year, int semester) throws IOException, SQLException {
-
-		Connection dbConnection = SQL_init();
 		
 		Iterator<String> iterate = codes.iterator();
 		
@@ -535,8 +536,6 @@ public class Retrieve {
 				}
 			}
 		}
-		populateBuilding(dbConnection);
-		dbConnection.close();
 	}
 	
 	public static JsonObject readJsonFromURL(String stringURL) throws IOException {
@@ -564,9 +563,10 @@ public class Retrieve {
 		HashSet<String> codes = new HashSet<String>();
 		codes = findDepartmentCodes(rootObj);
 
-		
+		SQL_init();
 		findClasses(codes, year, semester);
-
+//		populateBuilding();
+		dbConnection.close();
 	}
 	
 
