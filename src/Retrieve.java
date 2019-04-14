@@ -5,7 +5,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
@@ -98,14 +97,6 @@ public class Retrieve {
 					+ ");";
 			
 			stmt.execute(classSQL);
-			
-			String coordinatesSQL = "CREATE TABLE IF NOT EXISTS COORDINATES(" +
-						"BUILDING	TEXT	NOT NULL," +
-						"LATTITUDE	REAL," +
-						"LONGITUDE	REAL," +
-						"PRIMARY KEY(BUILDING)"
-						+ ");";
-			stmt.execute(coordinatesSQL);
 			stmt.close();
 			return dbConnection;	
 
@@ -116,24 +107,6 @@ public class Retrieve {
 		return null;
 	}
 	
-//	public static void populateBuilding() throws SQLException {
-//		Statement stmt = null;
-//		String selectSQL = "SELECT DISTINCT LOCATION FROM CLASS";
-//		String insertSQL = null;
-//		
-//		stmt = dbConnection.createStatement();
-//		
-//		ResultSet rs = stmt.executeQuery(selectSQL);
-//		while(rs.next()) {
-//			String currentBuilding = rs.getString("LOCATION");
-//			System.out.println(currentBuilding);
-//			insertSQL = "INSERT OR REPLACE INTO COORDINATES(BUILDING) " +
-//						"VALUES('" + currentBuilding + "');";
-//			stmt.executeUpdate(insertSQL);
-//		}
-//		stmt.close();
-//		
-//	}
 	
 	public static void SQL_insert(Connection c, String courseID, String title, String session, String day,
 								String start_time, String end_time, String location, String instructor) {
@@ -565,10 +538,7 @@ public class Retrieve {
 
 		SQL_init();
 		findClasses(codes, year, semester);
-//		populateBuilding();
 		dbConnection.close();
 	}
-	
-
 
 }
