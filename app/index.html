@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>HackSC Map</title>
+	<link rel="stylesheet" type="text/css" href="input.css" />
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkcuhXxU1QlMNNesrI8N5H3JIXp7DqzwM&libraries=places"></script>
+	<script src="javascriptFiles/initMap.js"></script>
+	<script>
+	function loadPage() {
+		initMap();
+	}
+	</script>
+</head>
+<body onload="loadPage();">
+  <div id="floating-panel">
+    <b>Time of Travel: </b>
+    <select id="Time of Travel">
+      <option selected value="2400"> Current </option>
+      <option value="0800">8:00AM-8:59AM</option>
+      <option value="0900">9:00AM-9:59AM</option>
+      <option value="1000">10:00AM-10:59AM</option>
+      <option value="1100">11:00AM-11:59AM</option>
+      <option value="1200">12:00PM-12:59PM</option>
+      <option value="1300">1:00PM-1:59PM</option>
+      <option value="1400">2:00PM-2:59PM</option>
+      <option value="1500">3:00PM-3:59PM</option>
+      <option value="1600">4:00PM-4:59PM</option>
+      <option value="1700">5:00PM-5:59PM</option>
+      <option value="1800">6:00PM-6:59PM</option>
+      <option value="1900">7:00PM-7:59PM</option>
+      <option value="2000">8:00PM-8:59PM</option>
+      <option value="2100">9:00PM-9:59PM</option>
+    </select>
+  </div>
+	<div id="map"></div>
+</body>
+</html>
