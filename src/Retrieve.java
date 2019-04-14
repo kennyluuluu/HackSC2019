@@ -5,6 +5,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.HashSet;
@@ -81,7 +83,7 @@ public class Retrieve {
 			System.out.println("Opened database successfully");
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE [IF NOT EXISTS] CLASS( " +
+			String classSQL = "CREATE TABLE IF NOT EXISTS CLASS( " +
 					"COURSEID	TEXT 	NOT NULL,"  +
 					"TITLE		TEXT	NOT NULL," +
 					"SESSION	TEXT	NOT NULL," +
@@ -92,8 +94,16 @@ public class Retrieve {
 					"INSTRUCTOR	TEXT,"
 					+ "PRIMARY KEY(COURSEID, SESSION, DAY)"
 					+ ");";
-					
-			stmt.execute(sql);
+			
+			stmt.execute(classSQL);
+			
+			String coordinatesSQL = "CREATE TABLE IF NOT EXISTS COORDINATES(" +
+						"BUILDING	TEXT	NOT NULL," +
+						"LATTITUDE	REAL," +
+						"LONGITUDE	REAL," +
+						"PRIMARY KEY(BUILDING)"
+						+ ");";
+			stmt.execute(coordinatesSQL);
 			stmt.close();
 			return c;	
 
@@ -102,6 +112,24 @@ public class Retrieve {
 			System.exit(0);
 		}
 		return null;
+	}
+	
+	public static void populateBuilding(Connection c) throws SQLException {
+		Statement stmt = null;
+		String selectSQL = "SELECT DISTINCT LOCATION FROM CLASS";
+		String insertSQL = null;
+		
+		stmt = c.createStatement();
+		
+		ResultSet buildingNames = stmt.executeQuery(selectSQL);
+		while(buildingNames.next()) {
+			String currentBuilding = buildingNames.getString("LOCATION");
+			insertSQL = "INSERT OR REPLACE INTO COORDINATES(BUILDING)" +
+						"VALUES('" + currentBuilding + "');";
+			stmt.execute(insertSQL);
+		}
+		
+		
 	}
 	
 	public static void SQL_insert(Connection c, String courseID, String title, String session, String day,
@@ -133,10 +161,9 @@ public class Retrieve {
 		return classroom.replaceAll("\\d", "");
 	}
 
-	public static void findClasses(HashSet<String> codes, int year, int semester) throws IOException {
+	public static void findClasses(HashSet<String> codes, int year, int semester) throws IOException, SQLException {
 
 		Connection dbConnection = SQL_init();
-		SQL_insert(dbConnection, "PATH-551", "Biology", "046", "M", "10:00", "11:50", "OFFICE", "RICHARD");
 		
 		Iterator<String> iterate = codes.iterator();
 		
@@ -507,7 +534,9 @@ public class Retrieve {
 					}
 				}
 			}
-		} 
+		}
+		populateBuilding(dbConnection);
+		dbConnection.close();
 	}
 	
 	public static JsonObject readJsonFromURL(String stringURL) throws IOException {
@@ -524,14 +553,17 @@ public class Retrieve {
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, SQLException {
 		// TODO Auto-generated method stub
-		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/20143");
+		int year = getYear();
+		
+		// 1 is spring, 2 is summer, 3 is fall
+		int semester = getSemester();
+		
+		JsonObject rootObj = readJsonFromURL("https://web-app.usc.edu/web/soc/api/departments/" + year + semester);
 		HashSet<String> codes = new HashSet<String>();
 		codes = findDepartmentCodes(rootObj);
-		int year = getYear();
-		// 1 is sprint, 2 is summer, 3 is fall
-		int semester = getSemester();
+
 		
 		findClasses(codes, year, semester);
 
