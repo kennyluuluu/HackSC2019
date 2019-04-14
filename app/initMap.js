@@ -38,6 +38,7 @@ function initMap() {
 		} else {
 			time = parseInt(time);
 		}
+		// query goes here
 		console.log(typeof(time))
 		console.log(time);
 	})
