@@ -1,12 +1,7 @@
-# HackSC2019
-DONE:
-1. PARSE JSON FILE FROM USC WEBSITE TO STORE CLASS DATA IN SQL
-2. PARSING BUILDINGS WEBSITE FROM BUILDING CODE TO NAME AND ADDRESS
-3. CREATE A WEBPAGE WITH GOOGLE MAPS INTEGRATION CENTERED AT USC
-4. FRONTEND TIME INPUT
+# Trojan Wander
+Real time map application to display ongoing classes in each building at USC
 
-
-TODO:
-0. QUERY DATABASE FOR CLASSES THAT START IN INPUT HOUR
-1. QUERY DATABASE TO ADD TABLE THAT MAPS BUILDINGS TO COORDINATES
-2. GET DOMAIN FROM DOMAIN.COM
+# Built With
+* **Java** application to retrieve and parse class information from **USC’s Schedule of Classes API**
+* **Google Maps API** and **JavaScript** to display pins and information on each building at USC
+* **JDBC** and **SQLite** to store class information into a database
